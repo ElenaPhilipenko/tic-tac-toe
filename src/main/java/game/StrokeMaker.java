@@ -1,10 +1,8 @@
-package bot;
+package game;
 
 import model.BoardState;
 import model.CellState;
 import model.Stroke;
-import org.apache.log4j.Logger;
-
 
 
 /**

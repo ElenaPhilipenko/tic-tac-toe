@@ -5,7 +5,10 @@ import model.CellState;
 import model.GameState;
 import org.apache.log4j.Logger;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author Elena Kurilina
@@ -16,6 +19,18 @@ public class Judge {
     public GameState detectGameState(BoardState board) {
         final Set<Set<CellState>> linesToCheck = getLinesToCheck(board);
         return detectState(linesToCheck);
+    }
+
+    public void playGame(Player p1, Player p2) {
+        final BoardState board = new BoardState(3);
+        final StrokeMaker strokeMaker = new StrokeMaker();
+        while (detectGameState(board) == GameState.NOT_ENDED) {
+            strokeMaker.makeStroke(board, p1.findMove(board));
+            if (detectGameState(board) != GameState.NOT_ENDED) {
+                break;
+            }
+            strokeMaker.makeStroke(board, p2.findMove(board));
+        }
     }
 
     private Set<Set<CellState>> getLinesToCheck(BoardState board) {
@@ -45,12 +60,10 @@ public class Judge {
     private GameState detectState(Collection<Set<CellState>> lines) {
         boolean containsEmptyCells = false;
         for (Set<CellState> line : lines) {
-            if (line.size() == 1) {
+            if (isLineComplete(line)) {
                 final CellState winner = line.iterator().next();
-                if (winner != CellState.EMPTY) {
-                    LOG.debug("Winner is: " + winner);
-                    return winner == CellState.PLAYER1 ? GameState.PLAYER1_WON : GameState.PLAYER2_WON;
-                }
+                LOG.debug("Winner is: " + winner);
+                return winner == CellState.PLAYER1 ? GameState.PLAYER1_WON : GameState.PLAYER2_WON;
             }
             if (line.contains(CellState.EMPTY)) {
                 containsEmptyCells = true;
@@ -58,5 +71,9 @@ public class Judge {
         }
         LOG.debug("Game state is: " + (containsEmptyCells ? GameState.NOT_ENDED : GameState.TIE));
         return containsEmptyCells ? GameState.NOT_ENDED : GameState.TIE;
+    }
+
+    private boolean isLineComplete(Set<CellState> line) {
+        return line.size() == 1 && line.iterator().next() != CellState.EMPTY;
     }
 }

@@ -1,6 +1,7 @@
-package bot;
+package game.player;
 
 import game.Judge;
+import game.StrokeMaker;
 import model.BoardState;
 import model.CellState;
 import model.GameState;

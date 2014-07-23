@@ -1,4 +1,4 @@
-package bot;
+package game;
 
 import model.BoardState;
 import model.CellState;
@@ -6,27 +6,13 @@ import model.Stroke;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
  * @author Elena Kurilina
  */
-public class Bot {
-    private final Random random = new Random();
+public class BoardNavigator {
 
-    public Bot(CellState state) {
-        this.state = state;
-    }
-
-    public final CellState state;
-
-    public Stroke findMove(BoardState board) {
-        final List<Stroke> availableStrokes = findAvailableStrokes(board, state);
-        return availableStrokes.get(random.nextInt(availableStrokes.size()));
-
-    }
-
-    private List<Stroke> findAvailableStrokes(BoardState board, CellState player) {
+    public List<Stroke> findAvailableStrokes(BoardState board, CellState player) {
         final List<Stroke> availableStrokes = new ArrayList<Stroke>();
         for (int i = 0; i < board.rows.size(); i++) {
             final List<CellState> row = board.rows.get(i);
@@ -39,5 +25,4 @@ public class Bot {
         }
         return availableStrokes;
     }
-
 }

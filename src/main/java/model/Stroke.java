@@ -11,7 +11,6 @@ public class Stroke {
 
     public final CellState state;
 
-
     public Stroke(int column, int row, CellState state) {
         this.column = column;
         this.row = row;
