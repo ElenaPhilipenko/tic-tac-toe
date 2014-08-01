@@ -4,5 +4,10 @@ package model;
  * @author Elena Kurilina
  */
 public enum CellState {
-    EMPTY, PLAYER1, PLAYER2
+
+    EMPTY, PLAYER1, PLAYER2;
+
+    public static CellState getNextPlayer(CellState state) {
+        return state == PLAYER1 ? PLAYER2 : PLAYER1;
+    }
 }

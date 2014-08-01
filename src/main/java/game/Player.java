@@ -1,12 +1,12 @@
 package game;
 
 import model.BoardState;
-import model.Stroke;
+import model.Move;
 
 /**
  * @author Elena Kurilina
  */
 public interface Player {
 
-    Stroke findMove(BoardState board);
+    Move findMove(BoardState board);
 }

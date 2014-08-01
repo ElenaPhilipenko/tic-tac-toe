@@ -3,10 +3,9 @@ package game.player;
 import game.Player;
 import model.BoardState;
 import model.CellState;
-import model.Stroke;
+import model.Move;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
 
@@ -24,17 +23,17 @@ public class ConsolePlayer implements Player {
     }
 
     @Override
-    public Stroke findMove(BoardState board) {
+    public Move findMove(BoardState board) {
         printBoard(board);
-        String[] stroke = new String[0];
         try {
-            stroke = reader.readLine().split(" ");
-        } catch (IOException e) {
+            String[] stroke = reader.readLine().split(" ");
+            int column = Integer.parseInt(stroke[0]);
+            int row = Integer.parseInt(stroke[1]);
+            return new Move(column, row, state);
+        } catch (Exception e) {
             System.out.println("Can not parse stroke.");
+            return findMove(board);
         }
-        int column = Integer.parseInt(stroke[0]);
-        int row = Integer.parseInt(stroke[1]);
-        return new Stroke(column, row, state);
     }
 
     private static void printBoard(BoardState boardState) {

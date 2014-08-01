@@ -1,9 +1,9 @@
 package game.player;
 
-import game.StrokeMaker;
+import game.MoveMaker;
 import model.BoardState;
 import model.CellState;
-import model.Stroke;
+import model.Move;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -13,12 +13,12 @@ import java.util.List;
 /**
  * @author Elena Kurilina
  */
-public class StrokeTest {
-    StrokeMaker strokeMaker;
+public class MoveTest {
+    MoveMaker moveMaker;
 
     @BeforeMethod
     public void setUp() throws Exception {
-        strokeMaker = new StrokeMaker();
+        moveMaker = new MoveMaker();
     }
 
     @Test
@@ -49,7 +49,7 @@ public class StrokeTest {
 
         final int column = 1;
         final int row = 3;
-        strokeMaker.makeStroke(board, new Stroke(column, row, CellState.PLAYER1));
+        moveMaker.makeStroke(board, new Move(column, row, CellState.PLAYER1));
 
         Assert.assertTrue(board.rows.get(row).get(column).equals(CellState.PLAYER1));
     }
@@ -60,7 +60,7 @@ public class StrokeTest {
 
         final int column = 1;
         final int row = 2;
-        strokeMaker.makeStroke(board, new Stroke(column, row, CellState.PLAYER1));
+        moveMaker.makeStroke(board, new Move(column, row, CellState.PLAYER1));
 
         Assert.assertEquals(board.rows.get(1).get(1), CellState.EMPTY);
     }
@@ -71,8 +71,8 @@ public class StrokeTest {
         final int column = 1;
         final int row = 2;
 
-        strokeMaker.makeStroke(board, new Stroke(column, row, CellState.PLAYER1));
-        strokeMaker.makeStroke(board, new Stroke(column, row, CellState.PLAYER2));
+        moveMaker.makeStroke(board, new Move(column, row, CellState.PLAYER1));
+        moveMaker.makeStroke(board, new Move(column, row, CellState.PLAYER2));
 
         Assert.assertEquals(board.rows.get(row).get(column), CellState.PLAYER1);
     }

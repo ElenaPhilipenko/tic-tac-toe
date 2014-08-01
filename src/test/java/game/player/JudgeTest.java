@@ -1,11 +1,11 @@
 package game.player;
 
 import game.Judge;
-import game.StrokeMaker;
+import game.MoveMaker;
 import model.BoardState;
 import model.CellState;
 import model.GameState;
-import model.Stroke;
+import model.Move;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -14,14 +14,14 @@ import org.testng.annotations.Test;
  */
 public class JudgeTest {
     private final Judge judge = new Judge();
-    private final StrokeMaker strokeMaker = new StrokeMaker();
+    private final MoveMaker moveMaker = new MoveMaker();
 
     @Test
     public void testDetectNotEndedGameWith2DirtyCells() {
         final BoardState boardState = createBoardState();
 
-        strokeMaker.makeStroke(boardState, new Stroke(1, 1, CellState.PLAYER1));
-        strokeMaker.makeStroke(boardState, new Stroke(1, 0, CellState.PLAYER2));
+        moveMaker.makeStroke(boardState, new Move(1, 1, CellState.PLAYER1));
+        moveMaker.makeStroke(boardState, new Move(1, 0, CellState.PLAYER2));
 
         Assert.assertEquals(judge.detectGameState(boardState), GameState.NOT_ENDED);
     }
@@ -37,9 +37,9 @@ public class JudgeTest {
     public void testDetectWonByHorizontalLine() {
         final BoardState boardState = createBoardState();
 
-        strokeMaker.makeStroke(boardState, new Stroke(1, 0, CellState.PLAYER1));
-        strokeMaker.makeStroke(boardState, new Stroke(1, 1, CellState.PLAYER1));
-        strokeMaker.makeStroke(boardState, new Stroke(1, 2, CellState.PLAYER1));
+        moveMaker.makeStroke(boardState, new Move(1, 0, CellState.PLAYER1));
+        moveMaker.makeStroke(boardState, new Move(1, 1, CellState.PLAYER1));
+        moveMaker.makeStroke(boardState, new Move(1, 2, CellState.PLAYER1));
 
         Assert.assertEquals(judge.detectGameState(boardState), GameState.PLAYER1_WON);
     }
@@ -48,9 +48,9 @@ public class JudgeTest {
     public void testDetectWonByVerticalLine() {
         final BoardState boardState = createBoardState();
 
-        strokeMaker.makeStroke(boardState, new Stroke(0, 0, CellState.PLAYER1));
-        strokeMaker.makeStroke(boardState, new Stroke(1, 0, CellState.PLAYER1));
-        strokeMaker.makeStroke(boardState, new Stroke(2, 0, CellState.PLAYER1));
+        moveMaker.makeStroke(boardState, new Move(0, 0, CellState.PLAYER1));
+        moveMaker.makeStroke(boardState, new Move(1, 0, CellState.PLAYER1));
+        moveMaker.makeStroke(boardState, new Move(2, 0, CellState.PLAYER1));
 
         Assert.assertEquals(judge.detectGameState(boardState), GameState.PLAYER1_WON);
     }
@@ -59,10 +59,10 @@ public class JudgeTest {
     public void testDetectWonByMainDiagonal() {
         final BoardState boardState = createBoardState();
 
-        strokeMaker.makeStroke(boardState, new Stroke(0, 0, CellState.PLAYER1));
-        strokeMaker.makeStroke(boardState, new Stroke(1, 1, CellState.PLAYER1));
-        strokeMaker.makeStroke(boardState, new Stroke(2, 2, CellState.PLAYER1));
-        strokeMaker.makeStroke(boardState, new Stroke(1, 2, CellState.PLAYER2));
+        moveMaker.makeStroke(boardState, new Move(0, 0, CellState.PLAYER1));
+        moveMaker.makeStroke(boardState, new Move(1, 1, CellState.PLAYER1));
+        moveMaker.makeStroke(boardState, new Move(2, 2, CellState.PLAYER1));
+        moveMaker.makeStroke(boardState, new Move(1, 2, CellState.PLAYER2));
 
         Assert.assertEquals(judge.detectGameState(boardState), GameState.PLAYER1_WON);
     }
@@ -71,10 +71,10 @@ public class JudgeTest {
     public void testDetectWonByMinorDiagonal() {
         final BoardState boardState = createBoardState();
 
-        strokeMaker.makeStroke(boardState, new Stroke(2, 0, CellState.PLAYER1));
-        strokeMaker.makeStroke(boardState, new Stroke(1, 1, CellState.PLAYER1));
-        strokeMaker.makeStroke(boardState, new Stroke(0, 2, CellState.PLAYER1));
-        strokeMaker.makeStroke(boardState, new Stroke(0, 1, CellState.PLAYER2));
+        moveMaker.makeStroke(boardState, new Move(2, 0, CellState.PLAYER1));
+        moveMaker.makeStroke(boardState, new Move(1, 1, CellState.PLAYER1));
+        moveMaker.makeStroke(boardState, new Move(0, 2, CellState.PLAYER1));
+        moveMaker.makeStroke(boardState, new Move(0, 1, CellState.PLAYER2));
 
         Assert.assertEquals(judge.detectGameState(boardState), GameState.PLAYER1_WON);
     }
@@ -83,17 +83,17 @@ public class JudgeTest {
     public void testDetectTie() {
         final BoardState boardState = createBoardState();
 
-        strokeMaker.makeStroke(boardState, new Stroke(0, 1, CellState.PLAYER2));
-        strokeMaker.makeStroke(boardState, new Stroke(0, 0, CellState.PLAYER1));
-        strokeMaker.makeStroke(boardState, new Stroke(0, 2, CellState.PLAYER1));
+        moveMaker.makeStroke(boardState, new Move(0, 1, CellState.PLAYER2));
+        moveMaker.makeStroke(boardState, new Move(0, 0, CellState.PLAYER1));
+        moveMaker.makeStroke(boardState, new Move(0, 2, CellState.PLAYER1));
 
-        strokeMaker.makeStroke(boardState, new Stroke(1, 0, CellState.PLAYER2));
-        strokeMaker.makeStroke(boardState, new Stroke(1, 1, CellState.PLAYER1));
-        strokeMaker.makeStroke(boardState, new Stroke(1, 2, CellState.PLAYER2));
+        moveMaker.makeStroke(boardState, new Move(1, 0, CellState.PLAYER2));
+        moveMaker.makeStroke(boardState, new Move(1, 1, CellState.PLAYER1));
+        moveMaker.makeStroke(boardState, new Move(1, 2, CellState.PLAYER2));
 
-        strokeMaker.makeStroke(boardState, new Stroke(2, 0, CellState.PLAYER2));
-        strokeMaker.makeStroke(boardState, new Stroke(2, 1, CellState.PLAYER1));
-        strokeMaker.makeStroke(boardState, new Stroke(2, 2, CellState.PLAYER2));
+        moveMaker.makeStroke(boardState, new Move(2, 0, CellState.PLAYER2));
+        moveMaker.makeStroke(boardState, new Move(2, 1, CellState.PLAYER1));
+        moveMaker.makeStroke(boardState, new Move(2, 2, CellState.PLAYER2));
 
         Assert.assertEquals(judge.detectGameState(boardState), GameState.TIE);
     }

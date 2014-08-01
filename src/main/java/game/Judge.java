@@ -17,23 +17,35 @@ public class Judge {
     private static final Logger LOG = Logger.getLogger(Judge.class);
 
     public GameState detectGameState(BoardState board) {
-        final Set<Set<CellState>> linesToCheck = getLinesToCheck(board);
+        final Iterable<Set<CellState>> linesToCheck = getLinesToCheck(board);
         return detectState(linesToCheck);
     }
 
-    public void playGame(Player p1, Player p2) {
+    public BoardState playGame(Player p1, Player p2) {
+        LOG.info("Game was started.");
         final BoardState board = new BoardState(3);
-        final StrokeMaker strokeMaker = new StrokeMaker();
+        final MoveMaker moveMaker = new MoveMaker();
         while (detectGameState(board) == GameState.NOT_ENDED) {
-            strokeMaker.makeStroke(board, p1.findMove(board));
-            if (detectGameState(board) != GameState.NOT_ENDED) {
+            waitForMove(p1, board, moveMaker);
+            final GameState state = detectGameState(board);
+            LOG.info(state);
+            if (state != GameState.NOT_ENDED) {
                 break;
             }
-            strokeMaker.makeStroke(board, p2.findMove(board));
+            waitForMove(p2, board, moveMaker);
+        }
+        return board;
+    }
+
+    private void waitForMove(Player player, BoardState board, MoveMaker moveMaker) {
+        boolean strokeWasMade = moveMaker.makeStroke(board, player.findMove(board));
+        if (!strokeWasMade) {
+            LOG.info("Make a valid move.");
+            waitForMove(player, board, moveMaker);
         }
     }
 
-    private Set<Set<CellState>> getLinesToCheck(BoardState board) {
+    private Iterable<Set<CellState>> getLinesToCheck(BoardState board) {
         final Set<Set<CellState>> lines = new HashSet<Set<CellState>>();
         final Set<CellState> mainDiagonal = new HashSet<CellState>();
         final Set<CellState> minorDiagonal = new HashSet<CellState>();
@@ -57,23 +69,20 @@ public class Judge {
         return column;
     }
 
-    private GameState detectState(Collection<Set<CellState>> lines) {
+    private GameState detectState(Iterable<Set<CellState>> lines) {
         boolean containsEmptyCells = false;
-        for (Set<CellState> line : lines) {
+        for (Collection<CellState> line : lines) {
             if (isLineComplete(line)) {
-                final CellState winner = line.iterator().next();
-                LOG.debug("Winner is: " + winner);
-                return winner == CellState.PLAYER1 ? GameState.PLAYER1_WON : GameState.PLAYER2_WON;
+                return GameState.getWinningStateFor(line.iterator().next());
             }
             if (line.contains(CellState.EMPTY)) {
                 containsEmptyCells = true;
             }
         }
-        LOG.debug("Game state is: " + (containsEmptyCells ? GameState.NOT_ENDED : GameState.TIE));
         return containsEmptyCells ? GameState.NOT_ENDED : GameState.TIE;
     }
 
-    private boolean isLineComplete(Set<CellState> line) {
+    private boolean isLineComplete(Collection<CellState> line) {
         return line.size() == 1 && line.iterator().next() != CellState.EMPTY;
     }
 }

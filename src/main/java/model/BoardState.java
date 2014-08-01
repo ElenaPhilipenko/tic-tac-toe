@@ -18,6 +18,14 @@ public class BoardState {
         }
     }
 
+    public BoardState(ArrayList<List<CellState>> rows) {
+        final ArrayList<List<CellState>> clone = new ArrayList<List<CellState>>();
+        for(List<CellState> row: rows){
+            clone.add(new ArrayList<CellState>(row));
+        }
+        this.rows = clone;
+    }
+
     public int getSize() {
         return rows.size();
     }
@@ -29,6 +37,5 @@ public class BoardState {
         }
         return result;
     }
-
 
 }

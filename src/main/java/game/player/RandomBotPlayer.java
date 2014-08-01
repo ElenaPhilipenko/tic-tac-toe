@@ -1,37 +1,28 @@
 package game.player;
 
-import game.BoardNavigator;
+import game.BoardUtils;
 import game.Player;
 import model.BoardState;
 import model.CellState;
-import model.Stroke;
+import model.Move;
 
-import java.util.List;
-import java.util.Random;
+import java.util.Collection;
 
 /**
  * @author Elena Kurilina
  */
 public class RandomBotPlayer implements Player {
-    private final Random random = new Random();
-    private final BoardNavigator boardNavigator = new BoardNavigator();
+    public final CellState state;
+    private final BoardUtils boardUtils = new BoardUtils();
 
     public RandomBotPlayer(CellState state) {
         this.state = state;
     }
 
-    public final CellState state;
-
-    public Stroke findMove(BoardState board) {
-        final List<Stroke> availableStrokes = boardNavigator.findAvailableStrokes(board, state);
-        return chooseRandomStroke(availableStrokes);
-
+    public Move findMove(BoardState board) {
+        final Collection<Move> availableMoves = boardUtils.findAvailableMoves(board, state);
+        return boardUtils.chooseRandomMove(availableMoves);
     }
-
-    private Stroke chooseRandomStroke(List<Stroke> availableStrokes) {
-        return availableStrokes.get(random.nextInt(availableStrokes.size()));
-    }
-
 
 
 }
