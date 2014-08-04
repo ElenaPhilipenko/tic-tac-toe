@@ -1,4 +1,4 @@
-import game.Judge;
+import game.Game;
 import game.player.SmartPlayer;
 import game.player.ConsolePlayer;
 import game.Player;
@@ -14,9 +14,9 @@ public class BotVsConsolePlayer {
     public static void main(String[] args) throws IOException {
         final Player stan = new SmartPlayer(CellState.PLAYER1);
         final Player lena = new ConsolePlayer(CellState.PLAYER2);
-        final Judge judge = new Judge();
+        final Game game = new Game();
         System.out.print("");
-        judge.playGame( lena, stan);
+        game.playGame(stan, lena);
     }
 
 

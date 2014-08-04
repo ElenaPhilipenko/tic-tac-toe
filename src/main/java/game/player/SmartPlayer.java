@@ -1,13 +1,7 @@
 package game.player;
 
-import game.BoardUtils;
-import game.Judge;
 import game.Player;
-import game.MoveMaker;
-import model.BoardState;
-import model.CellState;
-import model.GameState;
-import model.Move;
+import model.*;
 
 import java.util.*;
 
@@ -24,9 +18,6 @@ public class SmartPlayer implements Player {
     private static final int FAIL_COST = -1;
 
     private final CellState player;
-    private final MoveMaker moveMaker = new MoveMaker();
-    private final BoardUtils boardUtils = new BoardUtils();
-    private final Judge judge = new Judge();
     private final Random random = new Random();
 
     public SmartPlayer(CellState player) {
@@ -35,17 +26,18 @@ public class SmartPlayer implements Player {
 
     @Override
     public Move findMove(BoardState board) {
-        final Iterable<Move> availableMoves = boardUtils.findAvailableMoves(board, player);
-        final Iterable<EvaluatedMove> evaluatedMoves = evaluateMoves(board, availableMoves);
+        final Iterable<Cell> emptyCells = board.findEmptyCells();
+        final Iterable<EvaluatedMove> evaluatedMoves = convertToEvaluatedMoves(board, emptyCells);
         return findBestMove(evaluatedMoves);
     }
 
-    private Iterable<EvaluatedMove> evaluateMoves(BoardState board, Iterable<Move> availableMoves) {
-        Set<EvaluatedMove> possibleMoves = new HashSet<EvaluatedMove>();
-        for (Move move : availableMoves) {
-            possibleMoves.add(new EvaluatedMove(move, evaluate(move, board)));
+    private Iterable<EvaluatedMove> convertToEvaluatedMoves(BoardState board, Iterable<Cell> emptyCells) {
+        final Set<EvaluatedMove> evaluatedMoves = new HashSet<EvaluatedMove>();
+        for (Cell cell : emptyCells) {
+            final Move move = new Move(cell, player);
+            evaluatedMoves.add(new EvaluatedMove(move, evaluate(move, board)));
         }
-        return possibleMoves;
+        return evaluatedMoves;
     }
 
     private Move findBestMove(Iterable<EvaluatedMove> moves) {
@@ -65,22 +57,21 @@ public class SmartPlayer implements Player {
     }
 
     private int evaluate(Move move, BoardState board) {
-        final BoardState boardWithMove = new BoardState(board.rows);
-        moveMaker.makeStroke(boardWithMove, move);
-        GameState gameState = judge.detectGameState(boardWithMove);
+        final BoardState updatedBoard = board.makeMove(move);
+        final GameState gameState = updatedBoard.detectGameState();
         if (gameState == GameState.NOT_ENDED) {
-            return findBestCostOfNextMoves(getNextPlayer(move.player), boardWithMove);
+            return findBestCostOfNextMoves(getNextPlayer(move.player), updatedBoard);
         } else {
             return getCostOfGameState(gameState);
         }
     }
 
     private int findBestCostOfNextMoves(CellState currentPlayer, BoardState board) {
-        Iterable<Move> availableMoves = boardUtils.findAvailableMoves(board, currentPlayer);
+        final Iterable<Cell> emptyCells = board.findEmptyCells();
         int bestCost = findWorstCostFor(currentPlayer);
-        for (Move availableMove : availableMoves) {
-            final int cost = evaluate(availableMove, board);
-            bestCost = chooseMinMax(availableMove.player == player, cost, bestCost);
+        for (Cell cell : emptyCells) {
+            final int cost = evaluate(new Move(cell, currentPlayer), board);
+            bestCost = chooseMinMax(currentPlayer == player, cost, bestCost);
         }
         return bestCost;
     }

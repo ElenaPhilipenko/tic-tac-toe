@@ -5,16 +5,26 @@ package model;
  */
 public class Move {
 
-    public final int column;
-
-    public final int row;
+    public final Cell cell;
 
     public final CellState player;
 
-    public Move(int column, int row, CellState player) {
-        this.column = column;
-        this.row = row;
+    public Move(Cell cell, CellState player) {
+        this.cell = cell;
         this.player = player;
+    }
+
+    public Move(int row, int column, CellState player) {
+        this.cell = new Cell(row, column);
+        this.player = player;
+    }
+
+    @Override
+    public String toString() {
+        return "Move{" +
+                "cell=" + cell +
+                ", player=" + player +
+                '}';
     }
 
     @Override
@@ -24,8 +34,7 @@ public class Move {
 
         Move move = (Move) o;
 
-        if (column != move.column) return false;
-        if (row != move.row) return false;
+        if (cell != null ? !cell.equals(move.cell) : move.cell != null) return false;
         if (player != move.player) return false;
 
         return true;
@@ -33,8 +42,7 @@ public class Move {
 
     @Override
     public int hashCode() {
-        int result = column;
-        result = 31 * result + row;
+        int result = cell != null ? cell.hashCode() : 0;
         result = 31 * result + (player != null ? player.hashCode() : 0);
         return result;
     }
