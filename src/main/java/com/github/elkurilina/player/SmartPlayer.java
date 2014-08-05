@@ -1,12 +1,12 @@
-package game.player;
+package com.github.elkurilina.player;
 
-import game.Player;
-import model.*;
+import com.github.elkurilina.Player;
+import com.github.elkurilina.game.*;
 
 import java.util.*;
 
-import static model.CellState.getNextPlayer;
-import static model.GameState.getWinningStateFor;
+import static com.github.elkurilina.game.CellState.getNextPlayer;
+import static com.github.elkurilina.game.GameState.getWinningStateFor;
 
 /**
  * @author Elena Kurilina
@@ -89,7 +89,7 @@ public class SmartPlayer implements Player {
         return max ? Math.max(option1, option2) : Math.min(option1, option2);
     }
 
-    private class EvaluatedMove {
+    private static class EvaluatedMove {
         public final Move move;
         public final int cost;
 

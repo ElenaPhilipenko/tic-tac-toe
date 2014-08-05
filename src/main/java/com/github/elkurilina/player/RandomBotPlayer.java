@@ -1,10 +1,10 @@
-package game.player;
+package com.github.elkurilina.player;
 
-import game.Player;
-import model.BoardState;
-import model.Cell;
-import model.CellState;
-import model.Move;
+import com.github.elkurilina.Player;
+import com.github.elkurilina.game.BoardState;
+import com.github.elkurilina.game.Cell;
+import com.github.elkurilina.game.CellState;
+import com.github.elkurilina.game.Move;
 
 import java.util.Collection;
 

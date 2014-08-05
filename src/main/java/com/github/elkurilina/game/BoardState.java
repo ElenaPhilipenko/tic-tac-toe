@@ -1,4 +1,4 @@
-package model;
+package com.github.elkurilina.game;
 
 import java.util.*;
 
@@ -7,7 +7,7 @@ import java.util.*;
  */
 public class BoardState {
 
-    private final ArrayList<List<CellState>> rows;
+    private final List<List<CellState>> rows;
 
     public BoardState(int size) {
         this.rows = new ArrayList<List<CellState>>(size);
@@ -16,7 +16,7 @@ public class BoardState {
         }
     }
 
-    private BoardState(ArrayList<List<CellState>> rows) {
+    private BoardState(List<List<CellState>> rows) {
         final ArrayList<List<CellState>> clone = new ArrayList<List<CellState>>();
         for (List<CellState> row : rows) {
             clone.add(new ArrayList<CellState>(row));

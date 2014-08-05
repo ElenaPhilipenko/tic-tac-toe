@@ -1,6 +1,6 @@
-import game.Game;
-import game.player.RandomBotPlayer;
-import model.CellState;
+import com.github.elkurilina.game.Game;
+import com.github.elkurilina.player.RandomBotPlayer;
+import com.github.elkurilina.game.CellState;
 
 /**
  * @author Elena Kurilina

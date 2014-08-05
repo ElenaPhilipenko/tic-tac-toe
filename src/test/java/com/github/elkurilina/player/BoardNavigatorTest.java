@@ -1,8 +1,8 @@
-package game.player;
+package com.github.elkurilina.player;
 
-import model.BoardState;
-import model.CellState;
-import model.Move;
+import com.github.elkurilina.game.BoardState;
+import com.github.elkurilina.game.CellState;
+import com.github.elkurilina.game.Move;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 

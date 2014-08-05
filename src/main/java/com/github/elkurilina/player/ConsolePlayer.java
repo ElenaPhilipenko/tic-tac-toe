@@ -1,9 +1,9 @@
-package game.player;
+package com.github.elkurilina.player;
 
-import game.Player;
-import model.BoardState;
-import model.CellState;
-import model.Move;
+import com.github.elkurilina.Player;
+import com.github.elkurilina.game.BoardState;
+import com.github.elkurilina.game.CellState;
+import com.github.elkurilina.game.Move;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -22,7 +22,9 @@ public class ConsolePlayer implements Player {
     }
 
     private static void printBoard(BoardState boardState) {
+        System.out.println("  012");
         for (int i = 0; i < boardState.getSize(); i++) {
+            System.out.print(i + " ");
             for (int j = 0; j < boardState.getSize(); j++) {
                 final CellState cell = boardState.getCell(i, j);
                 System.out.print(cell == CellState.PLAYER1 ? "x" : cell == CellState.PLAYER2 ? "o" : "-");
@@ -34,6 +36,7 @@ public class ConsolePlayer implements Player {
     @Override
     public Move findMove(BoardState board) {
         printBoard(board);
+        System.out.println("Enter your move in format: column row");
         try {
             String[] move = reader.readLine().split(" ");
             int column = Integer.parseInt(move[0]);

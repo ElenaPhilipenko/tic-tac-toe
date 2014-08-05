@@ -1,4 +1,4 @@
-package model;
+package com.github.elkurilina.game;
 
 /**
  * @author Elena Kurilina
