@@ -1,7 +1,7 @@
 import com.github.elkurilina.game.Game;
 import com.github.elkurilina.player.SmartPlayer;
 import com.github.elkurilina.player.ConsolePlayer;
-import com.github.elkurilina.Player;
+import com.github.elkurilina.game.Player;
 import com.github.elkurilina.game.CellState;
 
 import java.io.IOException;

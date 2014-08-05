@@ -1,6 +1,5 @@
 package com.github.elkurilina.player;
 
-import com.github.elkurilina.Player;
 import com.github.elkurilina.game.*;
 
 import java.util.*;
@@ -25,13 +24,13 @@ public class SmartPlayer implements Player {
     }
 
     @Override
-    public Move findMove(BoardState board) {
+    public Move findMove(Board board) {
         final Iterable<Cell> emptyCells = board.findEmptyCells();
         final Iterable<EvaluatedMove> evaluatedMoves = convertToEvaluatedMoves(board, emptyCells);
         return findBestMove(evaluatedMoves);
     }
 
-    private Iterable<EvaluatedMove> convertToEvaluatedMoves(BoardState board, Iterable<Cell> emptyCells) {
+    private Iterable<EvaluatedMove> convertToEvaluatedMoves(Board board, Iterable<Cell> emptyCells) {
         final Set<EvaluatedMove> evaluatedMoves = new HashSet<EvaluatedMove>();
         for (Cell cell : emptyCells) {
             final Move move = new Move(cell, player);
@@ -56,8 +55,8 @@ public class SmartPlayer implements Player {
         return bestMoves.get(random.nextInt(bestMoves.size()));
     }
 
-    private int evaluate(Move move, BoardState board) {
-        final BoardState updatedBoard = board.makeMove(move);
+    private int evaluate(Move move, Board board) {
+        final Board updatedBoard = board.makeMove(move);
         final GameState gameState = updatedBoard.detectGameState();
         if (gameState == GameState.NOT_ENDED) {
             return findBestCostOfNextMoves(getNextPlayer(move.player), updatedBoard);
@@ -66,7 +65,7 @@ public class SmartPlayer implements Player {
         }
     }
 
-    private int findBestCostOfNextMoves(CellState currentPlayer, BoardState board) {
+    private int findBestCostOfNextMoves(CellState currentPlayer, Board board) {
         final Iterable<Cell> emptyCells = board.findEmptyCells();
         int bestCost = findWorstCostFor(currentPlayer);
         for (Cell cell : emptyCells) {

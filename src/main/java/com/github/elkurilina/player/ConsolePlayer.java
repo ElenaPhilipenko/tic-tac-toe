@@ -1,9 +1,9 @@
 package com.github.elkurilina.player;
 
-import com.github.elkurilina.Player;
-import com.github.elkurilina.game.BoardState;
+import com.github.elkurilina.game.Board;
 import com.github.elkurilina.game.CellState;
 import com.github.elkurilina.game.Move;
+import com.github.elkurilina.game.Player;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -21,7 +21,7 @@ public class ConsolePlayer implements Player {
         this.reader = new BufferedReader(new InputStreamReader(System.in));
     }
 
-    private static void printBoard(BoardState boardState) {
+    private static void printBoard(Board boardState) {
         System.out.println("  012");
         for (int i = 0; i < boardState.getSize(); i++) {
             System.out.print(i + " ");
@@ -34,7 +34,7 @@ public class ConsolePlayer implements Player {
     }
 
     @Override
-    public Move findMove(BoardState board) {
+    public Move findMove(Board board) {
         printBoard(board);
         System.out.println("Enter your move in format: column row");
         try {

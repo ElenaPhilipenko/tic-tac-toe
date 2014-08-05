@@ -1,6 +1,6 @@
 package com.github.elkurilina.game;
 
-import com.github.elkurilina.Player;
+import com.github.elkurilina.board.ListBoard;
 import org.apache.log4j.Logger;
 
 /**
@@ -9,9 +9,9 @@ import org.apache.log4j.Logger;
 public class Game {
     private static final Logger LOG = Logger.getLogger(Game.class);
 
-    public BoardState playGame(Player p1, Player p2) {
+    public Board playGame(Player p1, Player p2) {
         LOG.info("Game was started.");
-        BoardState board = new BoardState(3);
+        Board board = new ListBoard(3);
         GameState state = GameState.NOT_ENDED;
         while (board.detectGameState() == GameState.NOT_ENDED) {
             board = waitForMove(p1, board);
@@ -25,7 +25,7 @@ public class Game {
         return board;
     }
 
-    private BoardState waitForMove(Player player, BoardState board) {
+    private Board waitForMove(Player player, Board board) {
         final Move move = player.findMove(board);
         if (board.getCell(move.cell.row, move.cell.column) != CellState.EMPTY) {
             System.out.println("Choose empty cell for your move.");

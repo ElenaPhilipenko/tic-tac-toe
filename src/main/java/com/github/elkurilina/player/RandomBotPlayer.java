@@ -1,10 +1,6 @@
 package com.github.elkurilina.player;
 
-import com.github.elkurilina.Player;
-import com.github.elkurilina.game.BoardState;
-import com.github.elkurilina.game.Cell;
-import com.github.elkurilina.game.CellState;
-import com.github.elkurilina.game.Move;
+import com.github.elkurilina.game.*;
 
 import java.util.Collection;
 
@@ -18,7 +14,7 @@ public class RandomBotPlayer implements Player {
         this.player = player;
     }
 
-    public Move findMove(BoardState board) {
+    public Move findMove(Board board) {
         final Collection<Cell> emptyCells = board.findEmptyCells();
         return new Move(emptyCells.iterator().next(), player);
     }

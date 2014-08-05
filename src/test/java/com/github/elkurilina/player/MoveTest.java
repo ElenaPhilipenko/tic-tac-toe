@@ -1,6 +1,6 @@
 package com.github.elkurilina.player;
 
-import com.github.elkurilina.game.BoardState;
+import com.github.elkurilina.board.ListBoard;
 import com.github.elkurilina.game.CellState;
 import com.github.elkurilina.game.Move;
 import org.testng.Assert;
@@ -14,7 +14,7 @@ public class MoveTest {
     @Test
     public void testCreateBoardSize() {
         final int columns = 3;
-        final BoardState boardState = new BoardState(columns);
+        final ListBoard boardState = new ListBoard(columns);
         Assert.assertEquals(boardState.getSize(), columns);
     }
 
@@ -22,7 +22,7 @@ public class MoveTest {
     public void testCreatedBoardIsEmpty() {
         final int columns = 3;
 
-        final BoardState boardState = new BoardState(columns);
+        final ListBoard boardState = new ListBoard(columns);
 
         for (int i = 0; i < boardState.getSize(); i++) {
             for (int j = 0; j > boardState.getSize(); j++) {
@@ -33,8 +33,8 @@ public class MoveTest {
     }
 
     @Test
-    public void testMakingStroke() {
-        BoardState board = new BoardState(4);
+    public void testMakingMove() {
+        ListBoard board = new ListBoard(4);
 
         final int column = 1;
         final int row = 3;
@@ -45,7 +45,7 @@ public class MoveTest {
 
     @Test
     public void testMakingStrokeDidntChangeOtherCell() {
-        BoardState board = new BoardState(3);
+        ListBoard board = new ListBoard(3);
 
         final int column = 1;
         final int row = 2;
@@ -56,7 +56,7 @@ public class MoveTest {
 
     @Test
     public void testMakingStrokeDintOverride() {
-        BoardState board = new BoardState(7);
+        ListBoard board = new ListBoard(7);
         final int column = 1;
         final int row = 2;
 

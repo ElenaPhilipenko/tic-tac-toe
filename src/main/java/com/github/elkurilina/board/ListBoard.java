@@ -1,22 +1,24 @@
-package com.github.elkurilina.game;
+package com.github.elkurilina.board;
+
+import com.github.elkurilina.game.*;
 
 import java.util.*;
 
 /**
  * @author Elena Kurilina
  */
-public class BoardState {
+public class ListBoard implements Board {
 
     private final List<List<CellState>> rows;
 
-    public BoardState(int size) {
+    public ListBoard(int size) {
         this.rows = new ArrayList<List<CellState>>(size);
         for (int i = 0; i < size; i++) {
             this.rows.add(createListOf(CellState.EMPTY, size));
         }
     }
 
-    private BoardState(List<List<CellState>> rows) {
+    private ListBoard(List<List<CellState>> rows) {
         final ArrayList<List<CellState>> clone = new ArrayList<List<CellState>>();
         for (List<CellState> row : rows) {
             clone.add(new ArrayList<CellState>(row));
@@ -32,8 +34,8 @@ public class BoardState {
         return rows.get(row).get(column);
     }
 
-    public BoardState makeMove(Move move) {
-        final BoardState stateClone = new BoardState(rows);
+    public ListBoard makeMove(Move move) {
+        final ListBoard stateClone = new ListBoard(rows);
         final CellState state = getCell(move.cell.row, move.cell.column);
         if (state == CellState.EMPTY) {
             stateClone.setCell(move.cell, move.player);

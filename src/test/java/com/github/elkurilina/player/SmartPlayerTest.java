@@ -1,10 +1,7 @@
 package com.github.elkurilina.player;
 
-import com.github.elkurilina.game.Game;
-import com.github.elkurilina.game.BoardState;
-import com.github.elkurilina.game.CellState;
-import com.github.elkurilina.game.GameState;
-import com.github.elkurilina.game.Move;
+import com.github.elkurilina.board.ListBoard;
+import com.github.elkurilina.game.*;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -15,12 +12,12 @@ import org.testng.annotations.Test;
 public class SmartPlayerTest {
 
     private SmartPlayer smartPlayer;
-    private BoardState board;
+    private Board board;
 
     @BeforeMethod
     public void setUp() throws Exception {
         smartPlayer = new SmartPlayer(CellState.PLAYER2);
-        board = new BoardState(3);
+        board = new ListBoard(3);
     }
 
     @Test
@@ -127,7 +124,7 @@ public class SmartPlayerTest {
     public void testSmartPlayerNotBeatByRandomPlayer() {
         final Game game = new Game();
 
-        final BoardState boardState = game.playGame(new RandomBotPlayer(CellState.PLAYER2), new SmartPlayer(CellState.PLAYER1));
+        final Board boardState = game.playGame(new RandomBotPlayer(CellState.PLAYER2), new SmartPlayer(CellState.PLAYER1));
         final GameState winner = boardState.detectGameState();
 
         Assert.assertTrue(winner == GameState.PLAYER1_WON || winner == GameState.TIE);
@@ -137,7 +134,7 @@ public class SmartPlayerTest {
     public void testSmartVsSmart() {
         final Game game = new Game();
 
-        final BoardState boardState = game.playGame(new SmartPlayer(CellState.PLAYER2), new SmartPlayer(CellState.PLAYER1));
+        final Board boardState = game.playGame(new SmartPlayer(CellState.PLAYER2), new SmartPlayer(CellState.PLAYER1));
         final GameState winner = boardState.detectGameState();
 
         Assert.assertTrue(winner == GameState.TIE);

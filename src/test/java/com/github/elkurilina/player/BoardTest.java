@@ -1,36 +1,39 @@
 package com.github.elkurilina.player;
 
-import com.github.elkurilina.game.BoardState;
+import com.github.elkurilina.board.ArrayBoard;
+import com.github.elkurilina.game.Board;
 import com.github.elkurilina.game.CellState;
 import com.github.elkurilina.game.Move;
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 /**
  * @author Elena Kurilina
  */
-public class BoardNavigatorTest {
+public class BoardTest {
+
+
+    private Board boardState;
+    @BeforeMethod
+    public void createBoard(){
+        boardState = new ArrayBoard(3);
+    }
 
     @Test
     public void testGetStrokesFromEmptyBoard() {
-        final BoardState boardState = new BoardState(3);
-
         Assert.assertEquals(boardState.findEmptyCells().size(), 9);
     }
 
     @Test
     public void testGetStrokesFromNotEmptyBoard() {
-        BoardState boardState = new BoardState(3);
-
         boardState = boardState.makeMove(new Move(1, 1, CellState.PLAYER2));
-
 
         Assert.assertEquals(boardState.findEmptyCells().size(), 8);
     }
 
     @Test
     public void testGetStrokesFromFilledBoard() {
-        BoardState boardState = new BoardState(3);
 
         boardState = boardState.makeMove(new Move(0, 0, CellState.PLAYER2));
         boardState = boardState.makeMove(new Move(1, 0, CellState.PLAYER1));
