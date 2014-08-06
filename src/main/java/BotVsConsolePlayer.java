@@ -1,6 +1,6 @@
 import com.github.elkurilina.game.Game;
-import com.github.elkurilina.player.SmartPlayer;
-import com.github.elkurilina.player.ConsolePlayer;
+import com.github.elkurilina.game.player.smartplayer.SmartPlayer;
+import com.github.elkurilina.game.player.ConsolePlayer;
 import com.github.elkurilina.game.Player;
 import com.github.elkurilina.game.CellState;
 

@@ -1,7 +1,8 @@
-package com.github.elkurilina.player;
+package com.github.elkurilina.game.player;
 
-import com.github.elkurilina.board.ListBoard;
+import com.github.elkurilina.game.board.ListBoard;
 import com.github.elkurilina.game.*;
+import com.github.elkurilina.game.player.smartplayer.SmartPlayer;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -102,6 +103,18 @@ public class SmartPlayerTest {
         final Move best = smartPlayer.findMove(board);
 
         Assert.assertEquals(best, new Move(1, 0, CellState.PLAYER2));
+    }
+
+    @Test
+    public void testMakeShortestWinningMove() {
+        smartPlayer = new SmartPlayer(CellState.PLAYER1);
+        board = board.makeMove(new Move(1, 1, CellState.PLAYER1));//0--
+        board = board.makeMove(new Move(0, 0, CellState.PLAYER2));//xxb
+        board = board.makeMove(new Move(0, 1, CellState.PLAYER1));//--0
+        board = board.makeMove(new Move(2, 2, CellState.PLAYER2));
+        final Move best = smartPlayer.findMove(board);
+
+        Assert.assertEquals(best.cell, new Cell(2, 1));
     }
 
     @Test

@@ -1,6 +1,6 @@
 package com.github.elkurilina.game;
 
-import com.github.elkurilina.board.ListBoard;
+import com.github.elkurilina.game.board.ListBoard;
 import org.apache.log4j.Logger;
 
 /**

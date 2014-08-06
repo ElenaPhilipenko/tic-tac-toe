@@ -1,4 +1,4 @@
-package com.github.elkurilina.player;
+package com.github.elkurilina.game.player;
 
 import com.github.elkurilina.game.Board;
 import com.github.elkurilina.game.CellState;

@@ -1,4 +1,4 @@
-package com.github.elkurilina.board;
+package com.github.elkurilina.game.board;
 
 import com.github.elkurilina.game.*;
 
@@ -7,36 +7,35 @@ import java.util.*;
 /**
  * @author Elena Kurilina
  */
-public class ArrayBoard implements Board {
+public class ListBoard implements Board {
 
-    private final CellState[][] board;
+    private final List<List<CellState>> rows;
 
-    public ArrayBoard(int size) {
-        this.board = new CellState[size][size];
+    public ListBoard(int size) {
+        this.rows = new ArrayList<List<CellState>>(size);
         for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                board[i][j] = CellState.EMPTY;
-            }
+            this.rows.add(createListOf(CellState.EMPTY, size));
         }
     }
 
-    private ArrayBoard(CellState[][] rows) {
-        this.board = new CellState[rows.length][rows.length];
-        for (int i = 0; i < getSize(); i++) {
-            board[i] = Arrays.copyOf(rows[i], getSize());
+    private ListBoard(List<List<CellState>> rows) {
+        final List<List<CellState>> clone = new ArrayList<List<CellState>>();
+        for (List<CellState> row : rows) {
+            clone.add(new ArrayList<CellState>(row));
         }
+        this.rows = clone;
     }
 
     public int getSize() {
-        return board.length;
+        return rows.size();
     }
 
     public CellState getCell(int row, int column) {
-        return board[row][column];
+        return rows.get(row).get(column);
     }
 
-    public ArrayBoard makeMove(Move move) {
-        final ArrayBoard stateClone = new ArrayBoard(board);
+    public ListBoard makeMove(Move move) {
+        final ListBoard stateClone = new ListBoard(rows);
         final CellState state = getCell(move.cell.row, move.cell.column);
         if (state == CellState.EMPTY) {
             stateClone.setCell(move.cell, move.player);
@@ -79,13 +78,11 @@ public class ArrayBoard implements Board {
         final Set<CellState> mainDiagonal = new HashSet<CellState>();
         final Set<CellState> minorDiagonal = new HashSet<CellState>();
         for (int i = 0; i < getSize(); i++) {
-            final CellState[] row = board[i];
-            mainDiagonal.add(row[i]);
-            minorDiagonal.add(row[(row.length - i - 1)]);
+            final List<CellState> row = rows.get(i);
+            mainDiagonal.add(row.get(i));
+            minorDiagonal.add(row.get(row.size() - i - 1));
             lines.add(getColumn(i));
-            final Set<CellState> rowSet = new HashSet<CellState>();
-            Collections.addAll(rowSet, row);
-            lines.add(rowSet);
+            lines.add(new HashSet<CellState>(row));
         }
         lines.add(mainDiagonal);
         lines.add(minorDiagonal);
@@ -98,15 +95,22 @@ public class ArrayBoard implements Board {
 
     private Set<CellState> getColumn(int i) {
         final Set<CellState> column = new HashSet<CellState>();
-        for (int j = 0; j < getSize(); j++) {
-            column.add(board[j][i]);
+        for (List<CellState> row : rows) {
+            column.add(row.get(i));
         }
         return column;
     }
 
     private void setCell(Cell cell, CellState value) {
-        board[cell.row][cell.column] = value;
+        rows.get(cell.row).set(cell.column, value);
     }
 
+    private List<CellState> createListOf(CellState value, int size) {
+        final List<CellState> result = new ArrayList<CellState>(size);
+        for (int i = 0; i < size; i++) {
+            result.add(value);
+        }
+        return result;
+    }
 
 }

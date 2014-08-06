@@ -1,4 +1,4 @@
-package com.github.elkurilina.player;
+package com.github.elkurilina.game.player.smartplayer;
 
 import com.github.elkurilina.game.*;
 
@@ -25,74 +25,83 @@ public class SmartPlayer implements Player {
 
     @Override
     public Move findMove(Board board) {
-        final Iterable<Cell> emptyCells = board.findEmptyCells();
+        final Collection<Cell> emptyCells = board.findEmptyCells();
+        if (emptyCells.size() == board.getSize() * board.getSize()) {
+            return new Move(1, 1, player);
+        }
         final Iterable<EvaluatedMove> evaluatedMoves = convertToEvaluatedMoves(board, emptyCells);
         return findBestMove(evaluatedMoves);
     }
 
     private Iterable<EvaluatedMove> convertToEvaluatedMoves(Board board, Iterable<Cell> emptyCells) {
-        final Set<EvaluatedMove> evaluatedMoves = new HashSet<EvaluatedMove>();
+        final Collection<EvaluatedMove> evaluatedMoves = new HashSet<EvaluatedMove>();
         for (Cell cell : emptyCells) {
             final Move move = new Move(cell, player);
-            evaluatedMoves.add(new EvaluatedMove(move, evaluate(move, board)));
+            evaluatedMoves.add(new EvaluatedMove(move, evaluate(move, board, 0)));
         }
         return evaluatedMoves;
     }
 
     private Move findBestMove(Iterable<EvaluatedMove> moves) {
         final List<Move> bestMoves = new ArrayList<Move>();
-        int bestCost = FAIL_COST;
+        MoveCost bestCost = moves.iterator().next().cost;
         for (EvaluatedMove move : moves) {
-            if (move.cost > bestCost) {
+            if (move.cost.isBetterThan(bestCost)) {
                 bestCost = move.cost;
                 bestMoves.clear();
                 bestMoves.add(move.move);
             }
-            if (move.cost == bestCost) {
+            if (move.cost.equals(bestCost)) {
                 bestMoves.add(move.move);
             }
         }
         return bestMoves.get(random.nextInt(bestMoves.size()));
     }
 
-    private int evaluate(Move move, Board board) {
+    private MoveCost evaluate(Move move, Board board, int steps) {
         final Board updatedBoard = board.makeMove(move);
         final GameState gameState = updatedBoard.detectGameState();
         if (gameState == GameState.NOT_ENDED) {
-            return findBestCostOfNextMoves(getNextPlayer(move.player), updatedBoard);
+            steps++;
+            return findBestCostOfNextMoves(getNextPlayer(move.player), updatedBoard, steps);
         } else {
-            return getCostOfGameState(gameState);
+            return getCostOfGameState(gameState, steps);
         }
     }
 
-    private int findBestCostOfNextMoves(CellState currentPlayer, Board board) {
+    private MoveCost findBestCostOfNextMoves(CellState currentPlayer, Board board, int currentStep) {
         final Iterable<Cell> emptyCells = board.findEmptyCells();
-        int bestCost = findWorstCostFor(currentPlayer);
+        MoveCost bestCost = new MoveCost(findWorstCostFor(currentPlayer), currentStep);
         for (Cell cell : emptyCells) {
-            final int cost = evaluate(new Move(cell, currentPlayer), board);
-            bestCost = chooseMinMax(currentPlayer == player, cost, bestCost);
+            final MoveCost option = evaluate(new Move(cell, currentPlayer), board, currentStep);
+            bestCost = chooseMinMax(currentPlayer == player, option, bestCost);
         }
         return bestCost;
     }
 
     private int findWorstCostFor(CellState currentPlayer) {
-        return chooseMinMax(currentPlayer != player, FAIL_COST, VICTORY_COST);
+        return currentPlayer != player ? Math.max(FAIL_COST, VICTORY_COST) : Math.min(FAIL_COST, VICTORY_COST);
     }
 
-    private int getCostOfGameState(GameState gameState) {
+    private MoveCost getCostOfGameState(GameState gameState, int steps) {
         final GameState victory = getWinningStateFor(player);
-        return victory == gameState ? VICTORY_COST : gameState == GameState.TIE ? TIE_COST : FAIL_COST;
+        final int cost = victory == gameState ? VICTORY_COST : gameState == GameState.TIE ? TIE_COST : FAIL_COST;
+        return new MoveCost(cost, steps);
     }
 
-    private int chooseMinMax(boolean max, int option1, int option2) {
-        return max ? Math.max(option1, option2) : Math.min(option1, option2);
+    private MoveCost chooseMinMax(boolean max, MoveCost option1, MoveCost option2) {
+        if (max) {
+            return option1.isBetterThan(option2) ? option1 : option2;
+        } else {
+            return option1.isBetterThan(option2) ? option2 : option1;
+        }
     }
 
     private static class EvaluatedMove {
         public final Move move;
-        public final int cost;
+        public final MoveCost cost;
 
-        public EvaluatedMove(Move move, int cost) {
+        public EvaluatedMove(Move move, MoveCost cost) {
             this.move = move;
             this.cost = cost;
         }

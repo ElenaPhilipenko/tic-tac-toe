@@ -1,6 +1,6 @@
-package com.github.elkurilina.player;
+package com.github.elkurilina.game.player;
 
-import com.github.elkurilina.board.ListBoard;
+import com.github.elkurilina.game.board.ListBoard;
 import com.github.elkurilina.game.CellState;
 import com.github.elkurilina.game.Move;
 import org.testng.Assert;
