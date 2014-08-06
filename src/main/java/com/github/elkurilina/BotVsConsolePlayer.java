@@ -1,3 +1,5 @@
+package com.github.elkurilina;
+
 import com.github.elkurilina.game.Game;
 import com.github.elkurilina.game.player.smartplayer.SmartPlayer;
 import com.github.elkurilina.game.player.ConsolePlayer;

@@ -21,7 +21,7 @@ public class Game {
             }
             board = waitForMove(p2, board);
         }
-        System.out.print("Game result is: " + state);
+        System.out.println("Game result is: " + state);
         return board;
     }
 

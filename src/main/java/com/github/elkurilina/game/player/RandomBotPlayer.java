@@ -18,7 +18,7 @@ public class RandomBotPlayer implements Player {
     }
 
     public Move findMove(Board board) {
-        final List<Cell> emptyCells = new ArrayList<>( board.findEmptyCells());
+        final List<Cell> emptyCells = new ArrayList<Cell>( board.findEmptyCells());
         return new Move(emptyCells.get(random.nextInt(emptyCells.size())), player);
     }
 
